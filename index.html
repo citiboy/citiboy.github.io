@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>北向持股分时数据-沪深300叠加</title>
+    <link rel="stylesheet" href="base.css" />
+    <script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?d0860193a19f308db304f97a1af5b815";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      var jQuery = $.noConflict();
+    </script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts.min.js"></script>
+    <script>
+      var strV4Domain = "https://dcfm.eastmoney.com/";
+      var centerDomain = "https://datacenter.eastmoney.com/";
+      var newHqDomain = "https://push2.eastmoney.com/";
+      var newHqut = "b2884a393a59ad64002292a3e90d46a5";
+      var newHqDomain_K = "https://push2his.eastmoney.com/";
+    </script>
+    <script type="text/javascript">
+      var pagedata = {
+        cglsdata: {
+          data: [],
+          pages: 5,
+          font: {
+            WoffUrl: null,
+            EotUrl: null,
+            FontMapping: null,
+          },
+        },
+      };
+      var strV4Domain =
+        "https://dcfm.eastmoney.com/EM_MutiSvcExpandInterface/api/js/get?";
+      var newHqDomain = "https://push2.eastmoney.com/";
+      var newHqDomain_K = "https://push2his.eastmoney.com/";
+    </script>
+
+    <script src="public_common_tools2019.js"></script>
+    <script src="base.js"></script>
+    <script src="gzcglist.js"></script>
+    <style>
+      ul li {
+        list-style-type: none;
+        font-size: 12px;
+        line-height: 24px;
+      }
+      h2 {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>北向持股分时数据-沪深300叠加</h2>
+
+    <p>
+      <input type="checkbox" id="cbIsAutoRefresh" />启用自动刷新<a
+        href="index2.html"
+        style="margin-left: 10px"
+        >查看北向与沪指叠加图</a
+      >
+    </p>
+    <div id="zjlx_chart" style="height: 300px"></div>
+    <div class="chart-data-cont">
+      <ul class="bE4E4E4">
+        <li class="btE4E4E4">
+          <div class="w100 fLeft">
+            <span class="blockColor bgc94c4ee"></span><span>沪股通</span>
+          </div>
+          <span>当日净流入</span>
+          <span class="w72">
+            <span class="hgt_drjlr">
+              <span>-</span>
+            </span>
+          </span>
+          <span>当日余额</span>
+          <span class="w72">
+            <span class="hgt_drye">
+              <span>-</span>
+            </span>
+          </span>
+          <span>当月净流入</span>
+          <span class="w72">
+            <span class="hgt_jyyjlr">
+              <span>-</span>
+            </span>
+          </span>
+          <span>累计净流入</span>
+          <span class="w72">
+            <span class="hgt_ljjlr">
+              <span>-</span>
+            </span>
+          </span>
+          <span>累计净买入</span>
+          <span class="w72">
+            <span class="hgt_ljjmr">
+              <span>-</span>
+            </span>
+          </span>
+        </li>
+        <li class="btE4E4E4">
+          <div class="w100 fLeft">
+            <span class="blockColor bgcea5404"></span><span>深股通</span>
+          </div>
+          <span>当日净流入</span>
+          <span class="w72">
+            <span class="sgt_drjlr">
+              <span>-</span>
+            </span>
+          </span>
+          <span>当日余额</span>
+          <span class="w72">
+            <span class="sgt_drye">
+              <span>-</span>
+            </span>
+          </span>
+          <span>当月净流入</span>
+          <span class="w72">
+            <span class="sgt_jyyjlr">
+              <span>-</span>
+            </span>
+          </span>
+          <span>累计净流入</span>
+          <span class="w72">
+            <span class="sgt_ljjlr">
+              <span>-</span>
+            </span>
+          </span>
+          <span>累计净买入</span>
+          <span class="w72">
+            <span class="sgt_ljjmr">
+              <span>-</span>
+            </span>
+          </span>
+        </li>
+        <li class="btE4E4E4">
+          <div class="w100 fLeft">
+            <span class="blockColor bgc4a3116"></span><span>北向</span>
+          </div>
+          <span>当日净流入</span>
+          <span class="w72">
+            <span class="bx_drjlr">
+              <span>-</span>
+            </span>
+          </span>
+          <span class="w72" style="width: 134px"></span>
+          <span>当月净流入</span>
+          <span class="w72">
+            <span class="bx_jyyjlr">
+              <span>-</span>
+            </span>
+          </span>
+          <span>累计净流入</span>
+          <span class="w72">
+            <span class="bx_ljjlr">
+              <span>-</span>
+            </span>
+          </span>
+          <span>累计净买入</span>
+          <span class="w72">
+            <span class="bx_ljjmr">
+              <span>-</span>
+            </span>
+          </span>
+        </li>
+      </ul>
+      <ul class="remark">
+        <li>
+          注：资金净流入=当日资金限额-当日资金余额。资金净流入包含当日成交净买额和当日买入申报未成交金额。北向资金是沪股通与深股通的资金加总；<a
+            href="//finance.eastmoney.com/news/1622,20161118685370149.html"
+            >了解详细</a
+          >
+        </li>
+        <li>
+          所有数据来源于东方财富网。<a
+            href="//data.eastmoney.com/hsgtcg/gzcglist.html"
+            >点击此处</a
+          >访问原网站。
+        </li>
+      </ul>
+    </div>
+    <script>
+      var isFirstInit = true;
+      var _this = this;
+      var intervalTimer;
+      jQuery("#cbIsAutoRefresh").click(function () {
+        // console.log(this.checked);
+        if (this.checked) {
+          intervalTimer = setInterval(() => {
+            _this.hgtjs1[0]();
+            _this.hgtjs1[1]("jmr", "fs", "0");
+          }, 3000);
+        } else {
+          clearInterval(intervalTimer);
+        }
+      });
+    </script>
+  </body>
+</html>
