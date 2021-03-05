@@ -611,7 +611,7 @@ var getCountry = function (o) {
             return "http://pngimg.com/uploads/bitcoin/bitcoin_PNG48.png"
         // var countries = o.img.filter(function (x){return o.text.includes(x.name)});
         // var countries = o.img.find(function (x){return o.text.includes(x.name)});
-        var selected = countries.map(function (x){return o.includes(x.name) ? {"code":x.code, "index":o.indexOf(x.name)} : null}).filter(function (x){return x && x.code});
+        var selected = countries.map(function (x){return o.includes(x.name) ? {"code":x.code, "index":o.replace("印尼","印度尼西亚").indexOf(x.name)} : null}).filter(function (x){return x && x.code});
         // console.log(selected)
         selected = selected.sort(function(a, b) { return (a.index - b.index); })
         // console.log(selected)
@@ -622,7 +622,7 @@ var getCountry = function (o) {
         // return countries&&countries.length>0?"https://www.geonames.de/flag-"+countries[countries.length-1].code.toLowerCase()+".gif":""
         // return countries?"https://www.geonames.de/flag-"+countries.code.toLowerCase()+".gif":""
       }
-var newest = newest.filter(function(o){return !o.type && !o.data.pic && o.data.pic!=null && !o.data.content.includes("<a") && !o.data.content.includes("脱水期货") && !o.data.content.includes(">>") && !o.data.content.includes("？")}).map(function(o){return {
+var newest = newest.filter(function(o){return !o.type && !o.data.pic && o.data.pic!=null && !o.data.content.includes("<a") && !o.data.content.includes("脱水期货") && !o.data.content.includes(">>") && !o.data.content.includes("？") && !o.data.content.includes("！") && !o.data.content.includes("点击查看") && !o.data.content.includes("点击观看")}).map(function(o){return {
           pointColor: 'yellow', // *关键点颜色 可选red yellow green
           img: getCountry(o.data.content),
           title: o.title,
