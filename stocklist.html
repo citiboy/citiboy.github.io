@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>动量模型</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="layui.css" tppabs="layui.css"  media="all">
+</head>
+<body>
+
+<canvas id="myChart" height="450" width="600"></canvas>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script src="layui.js" charset="utf-8"></script>
+
+<script src="Chart.js"></script>
+<script src="pako.js"></script>
+
+<script>
+// Get URI Query String
+function getQueryString(name) {
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+  var r = window.location.search.substr(1).match(reg);
+  if (r !== null)
+      return unescape(r[2]);
+  return null;
+}
+// "packs" an array of bytes (integers between 0 and 255) into a string
+function pack(bytes) {
+    var chars = [];
+    for(var i = 0, n = bytes.length; i < n;) {
+        chars.push(((bytes[i++] & 0xff) << 8) | (bytes[i++] & 0xff));
+    }
+    return String.fromCharCode.apply(null, chars);
+}
+// get a byte array from the string
+function unpack(str) {
+    var bytes = [];
+    for(var i = 0, n = str.length; i < n; i++) {
+        var char = str.charCodeAt(i);
+        bytes.push(char >>> 8, char & 0xFF);
+    }
+    return bytes;
+}
+// Convert a hex string to a ASCII string
+function hex2string(hexStr) {
+  var hex = hexStr.toString();//force conversion
+  var str = '';
+  for (var i = 0; i < hex.length; i += 2)
+      str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+  return str;
+}
+function arraybuffer2string(array){
+  strData = ''
+  /**
+   * String.fromCharCode.apply(null, new Uint16Array(data));
+   * String.fromCharCode.apply(null, array) 显示 Maximum call stack size exceeded
+   * 超过最大调用堆栈大小
+   *
+   */
+  let chunk = 8 * 1024;
+  let i;
+  for (i = 0; i < array.length / chunk; i++) {
+    strData += String.fromCharCode.apply(null, array.slice(i * chunk, (i + 1) * chunk));
+  }
+  strData += String.fromCharCode.apply(null, array.slice(i * chunk));
+  return strData;
+}
+function decompress(str) {
+  // var strData   = atob(str);
+  var strData   = hex2string(str);
+  // Convert binary string to character-number array
+  var charData  = strData.split('').map(function(x){return x.charCodeAt(0);});
+  // Turn number array into byte-array
+  var binData   = new Uint8Array(charData);
+  // unzip
+  data = pako.inflate(binData);
+  data = arraybuffer2string(new Uint16Array(data));
+  data = JSON.parse(data);
+  return data;
+}
+</script>
+<script>
+var $ = layui.jquery;
+var plateCode = getQueryString("plateCode");
+$.getJSON("https://getman.cn/mock/plateline/" + plateCode, function(res) {
+data = decompress(res.data);
+// var labels = Object.values(data.data.lists);
+// var data = Object.values(data.data.lists);
+var lists = data.data.lists.filter(x => x['nowTop']>0)
+var labels = lists.map(function(x) {
+    return x['dateTime'];
+});
+var data = lists.map(function(x) {
+    return x['nowTop'];
+    // return x['motionValue'];
+});
+// labels = Object.values(labels);
+// data = Object.values(data);
+var context = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(context, {
+    type : 'line',
+    data : {
+        labels : labels,
+        datasets : [{
+            label : '动量排名',
+            lineTension : 0.1,
+            data : data,
+            borderColor: "rgba(252, 33, 94, 0.5)",
+            backgroundColor : "rgba(255, 255, 255, 0)"
+            // backgroundColor : "rgba(255, 99, 132, 0.2)"
+        }]
+    },
+    options: {
+      // responsive: true,
+      scales: {
+      	xAxes: [{
+            gridLines: {
+              color: 'rgba(171,171,171,1)',
+              lineWidth: 0.1
+            }
+          }],
+        yAxes: [{
+          ticks: {
+            beginAtZero: false,
+            reverse: true,
+            //max: 70,
+            min: 1,
+            stepSize: 10
+          },
+          gridLines: {
+              color: 'rgba(171,171,171,1)',
+              lineWidth: 0.5
+            },
+          stacked: true
+        }]
+      }
+    }
+});
+
+});
+</script>
+
+<script>
+layui.use('table', function(){
+  var table = layui.table;
+
+  table.render({
+    elem: '#test'
+    ,url: 'https://getman.cn/mock/stocklist/' + plateCode
+    ,toolbar: true
+    ,title: '上榜个股'
+    ,totalRow: true
+    ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+    ,cols: [[
+      {field:'股票代码', width:80, title: '股票代码', hide: true, sort: true}
+      ,{field:'股票简称', width:100, title: '股票简称'}
+      ,{field:'最新价', width:80, title: '最新价', sort: true}
+      ,{field:'最新涨跌幅', width:80, title: '涨跌幅', sort: true}
+      ,{field:'区间涨跌幅', width:80, title: '区间涨跌幅', sort: true}
+      ,{field:'最新dde大单净额', width:80, title: '大单净额', sort: true}
+      ,{field:'陆股通持股占流通a股比', width:80, title: '北向持股比例', sort: true}
+      ,{field:'基金持股占流通股比例', width:80, title: '基金持股比例', sort: true}
+      ,{field:'基金持股家数', width:80, title: '基金持股家数', sort: true}
+      ,{field:'所属同花顺行业', title: '所属行业', width: '30%', minWidth: 100} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
+    ]]
+    ,page: false
+    ,response: {
+      statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+    }
+    ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+      data = decompress(res.data);
+      var result = data.data.map(x => {x['最新涨跌幅'] = x['最新涨跌幅'] ? Number(x['最新涨跌幅']).toFixed(2).toString() + '%' : null; x['基金持股占流通股比例'] = x['基金持股占流通股比例'] ? Number(x['基金持股占流通股比例']).toFixed(2).toString() + '%' : null; x['陆股通持股占流通a股比'] = x['陆股通持股占流通a股比'] ? x['陆股通持股占流通a股比'].toFixed(2).toString() + '%' : null; return x;});
+      return {
+        "code": 200, //解析接口状态
+        // "msg": res.msg, //解析提示文本
+        // "count": res.total, //解析数据长度
+        "data": result //解析数据列表
+      };
+    }
+  });
+
+  //监听行单击事件（双击事件为：rowDouble）
+  table.on('row(test)', function(obj){
+    var data = obj.data;
+    var stockname = data['股票简称'];
+    var stockcode = data['股票代码'].split('.').reverse().join('').toLowerCase();
+    layer.alert(JSON.stringify(data), {
+      icon: 1,
+      //title: stockname+ '(' + stockcode + ')',
+      title: false,
+      type: 1,
+      shade: 0.6,
+      moveType: 0,
+      //fix: true,
+      //maxmin: true,
+      //resize: true,
+      //area: ['', '325px'],
+      //area: ['472px', '273px'],
+      content: '<img display="table-cell" width=320 src="http://fchart.sina.com.cn/newchart/daily/' + stockcode + '.gif" />'
+    });
+
+    //标注选中样式
+    obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+  });
+
+});
+</script>
+
+</body>
+</html>
