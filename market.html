@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+       <meta name="viewport" content="width=device-width, viewport-fit=cover">
+       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+   </head>
+   <style>
+   </style>
+   <body style="height: 100%; margin: 0;background-color:#000">
+       <div id="container" style="width: 100%;height: 100%"></div>
+       </div>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+       <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+       <script type="text/javascript">
+        axios.get('https://getman.cn/mock/MarketBreadth')
+        .then(response => {
+            const data = response.data;
+            var matrixRow = [];
+            var i=0;
+            for(var key in data.swCodeNames)
+            {
+                var v=data.swCodeNames[key];
+                // console.log(v.indexCode,v.indexName);
+                var j=0;
+                var x=data.maMarketWidth[v.indexCode].map(o => [j++,i,o.value20]);
+                matrixRow.push(...x);
+                // console.log(key,data.maMarketWidth[key]);
+                i++;
+            };
+            // console.log(JSON.stringify(matrixRow));
+            myChart = echarts.init(document.getElementById('container'));
+            option = {
+                tooltip: {
+                    position: 'top'
+                },
+                animation: false,
+                xAxis: {
+                    type: 'category',
+                    data: data.dates,
+                    splitArea: {
+                        show: true
+                    },
+                    axisLine: {
+                               lineStyle: {
+                                   color: '#fff'
+                               }
+                           },
+                },
+                yAxis: [{
+                    type: 'category',
+                    data: data.swCodeNames.map(v => v.indexName),
+                    position: 'left',
+                    splitArea: {
+                        show: true
+                    },
+                    axisLine: {
+                               lineStyle: {
+                                   color: '#fff'
+                               }
+                           },
+                },
+                {
+                    type: 'category',
+                    data: data.swCodeNames.map(v => v.indexName),
+                    position: 'right',
+                    splitArea: {
+                        show: true
+                    },
+                    axisLine: {
+                               lineStyle: {
+                                   color: '#fff'
+                               }
+                           },
+                }],
+                visualMap: {
+                    min: 0,
+                    max: 100,
+                    calculable: true,
+                    // inRange: {color: ["#e0ffff","#dc143c"]},
+                    inRange: {color: ["#006edd", '#b8ddf0', '#e0ffff', '#e0bdb8', '#e16f56', '#eb190a']},
+                    show: false
+                },
+                series: [{
+                    type: 'heatmap',
+                    data: matrixRow,
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            };
+
+            myChart.setOption(option,{notMerge:true});
+        })
+        .catch(error => {
+           console.log(error);
+        });
+       </script>
+   </body>
+</html>
