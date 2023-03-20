@@ -156,15 +156,16 @@ layui.use('table', function(){
     ,totalRow: true
     ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
     ,cols: [[
-      {field:'证券代码', width:80, title: '股票代码', hide: true, sort: true}
-      ,{field:'名称', width:100, title: '股票简称'}
-      ,{field:'动能评级', width:100, title: '动能评级', sort: true}
-      ,{field:'行业轮动指标', width:130, title: '行业轮动指标', sort: true}
-      ,{field:'速度指标', width:100, title: '速度指标', sort: true}
-      ,{field:'极值', width:80, title: '极值', sort: true}
-      ,{field:'偏离指标', width:100, title: '偏离指标', sort: true}
-      ,{field:'地区', width:80, title: '地区', sort: true}
-      ,{field:'板块', title: '所属行业', width: '30%', minWidth: 100} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
+      {field:'股票代码', width:80, title: '股票代码', hide: true, sort: true}
+      ,{field:'股票简称', width:100, title: '股票简称'}
+      ,{field:'最新价', width:80, title: '最新价', sort: true}
+      ,{field:'最新涨跌幅', width:80, title: '涨跌幅', sort: true}
+      ,{field:'区间涨跌幅', width:80, title: '区间涨跌幅', sort: true}
+      ,{field:'最新dde大单净额', width:80, title: '大单净额', sort: true}
+      ,{field:'陆股通持股占流通a股比', width:80, title: '北向持股比例', sort: true}
+      ,{field:'基金持股占流通股比例', width:80, title: '基金持股比例', sort: true}
+      ,{field:'基金持股家数', width:80, title: '基金持股家数', sort: true}
+      ,{field:'所属同花顺行业', title: '所属行业', width: '30%', minWidth: 100} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
     ]]
     ,page: false
     ,response: {
@@ -172,7 +173,7 @@ layui.use('table', function(){
     }
     ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
       data = decompress(res.data);
-      var result = data.data.map(x => {x['行业轮动指标'] = x['行业轮动指标'] ? Number(x['行业轮动指标']).toFixed(2).toString() : null; x['速度指标'] = x['速度指标'] ? Number(x['速度指标']).toFixed(2).toString() : null; x['极值'] = x['极值'] ? x['极值'].toFixed(2).toString() : null; x['偏离指标'] = x['偏离指标'] ? x['偏离指标'].toFixed(2).toString() : null; return x;});
+      var result = data.data.map(x => {x['最新涨跌幅'] = x['最新涨跌幅'] ? Number(x['最新涨跌幅']).toFixed(2).toString() + '%' : null; x['基金持股占流通股比例'] = x['基金持股占流通股比例'] ? Number(x['基金持股占流通股比例']).toFixed(2).toString() + '%' : null; x['陆股通持股占流通a股比'] = x['陆股通持股占流通a股比'] ? x['陆股通持股占流通a股比'].toFixed(2).toString() + '%' : null; return x;});
       return {
         "code": 200, //解析接口状态
         // "msg": res.msg, //解析提示文本
