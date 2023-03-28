@@ -103,6 +103,15 @@
                 series: [{
                     type: 'heatmap',
                     data: matrixRow,
+                    label: {
+                        show: true,
+            // -------------------修改分割线-----------------------------
+            // 设置 formatter
+                        formatter:function(params){
+                            return params.data[2];
+                        }
+            // -------------------修改分割线-----------------------------
+                    },
                     itemStyle: {
                         emphasis: {
                             shadowBlur: 10,
