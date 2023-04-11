@@ -107,7 +107,7 @@
                 if(params.componentType =="yAxis" || params.componentType =="xAxis" ){
                     var plate = data.swCodeNames.filter(x => x.indexName == params.value)[0];
                     var index = layui.layer.open({
-                        title: plate.indexName + "(" + plate.indexCode.substring(0,6) + ")" + "板块上榜个股",
+                        title: plate.indexName + "(" + plate.indexCode.substring(0,6) + ")" + "板块成分",
                         type: 2,
                         content: "marketview.html?plateCode=" + plate.indexCode,
                         success: function (layero, index) {
