@@ -39,6 +39,7 @@
                 },
                 yAxis: [{
                     type: 'category',
+                    triggerEvent: true,
                     data: data.swCodeNames.map(v => v.indexName),
                     position: 'left',
                     splitArea: {
@@ -56,6 +57,7 @@
                 },
                 {
                     type: 'category',
+                    triggerEvent: true,
                     data: data.swCodeNames.map(v => v.indexName),
                     position: 'right',
                     splitArea: {
@@ -101,6 +103,24 @@
             };
 
             myChart.setOption(option,{notMerge:true});
+            myChart.on('click',function (params) {
+                if(params.componentType =="yAxis" || params.componentType =="xAxis" ){
+                    var plate = data.swCodeNames.filter(x => x.indexName == params.value)[0];
+                    var index = layui.layer.open({
+                        title: plate.indexName + "(" + plate.indexCode.substring(0,6) + ")" + "板块上榜个股",
+                        type: 2,
+                        content: "marketview.html?plateCode=" + plate.indexCode,
+                        success: function (layero, index) {
+                            setTimeout(function () {
+                                layui.layer.tips('点击此处返回', '.layui-layer-setwin .layui-layer-close', {
+                                    tips: 3
+                                });
+                            }, 500);
+                        }
+                    });
+                    layui.layer.full(index);
+                }
+            });
         })
         .catch(error => {
            console.log(error);
