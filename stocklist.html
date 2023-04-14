@@ -187,6 +187,8 @@ layui.use('table', function(){
     var data = obj.data;
     var stockname = data['股票简称'];
     var stockcode = data['股票代码'].split('.').reverse().join('').toLowerCase();
+    var w = window.screen.width;
+    var h = w * 300 / 545;
     layer.alert(JSON.stringify(data), {
       icon: 1,
       //title: stockname+ '(' + stockcode + ')',
@@ -198,8 +200,8 @@ layui.use('table', function(){
       //maxmin: true,
       //resize: true,
       //area: ['', '325px'],
-      //area: ['472px', '273px'],
-      content: '<img display="table-cell" width=320 src="http://fchart.sina.com.cn/newchart/daily/n/' + stockcode + '.gif" />'
+      area: [w+'px', h+'px'],
+      content: '<img display="table-cell" width='+w+' height='+h+' src="http://fchart.sina.com.cn/newchart/daily/n/' + stockcode + '.gif" />'
     });
 
     //标注选中样式
