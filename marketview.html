@@ -239,8 +239,10 @@ layui.use('table', function(){
       //maxmin: true,
       //resize: true,
       //area: ['', '325px'],
-      area: [w+'px', h+'px'],
-      content: '<img display="table-cell" width='+w+' height='+h+' src="http://fchart.sina.com.cn/newchart/daily/n/' + stockcode + '.gif" />'
+      // area: [w+'px', h+'px'],
+      area: ['100%', '50%'],
+      // content: '<img display="table-cell" width='+w+' height='+h+' src="http://fchart.sina.com.cn/newchart/daily/n/' + stockcode + '.gif" />'
+      content: '<img width="100%" src="http://fchart.sina.com.cn/newchart/daily/n/' + stockcode + '.gif" />'
     });
 
     //标注选中样式
