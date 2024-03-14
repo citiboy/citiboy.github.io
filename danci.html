@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>剑桥 Join in</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+      .word {
+        font-size: 36px;
+        color: #333;
+        text-align: center;
+        margin: 40px 0;
+      }
+      .definition {
+        font-size: 24px;
+        color: #666;
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .button {
+        display: block;
+        margin: 0 auto;
+        padding: 10px 30px;
+        border-radius: 5px;
+        background-color: #333;
+        color: #fff;
+        font-size: 18px;
+        text-align: center;
+        cursor: pointer;
+      }
+      .button:hover {
+        background-color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>剑桥 Join in</h1>
+      <div class="word">apple</div>
+      <div class="definition">n. 苹果</div>
+      <button class="button" onclick="showNext()">下一个</button>
+    </div>
+    <script>
+        var $ = document.querySelector.bind(document);
+        // function memorize(words){}
+        // 单词和定义列表
+        var words = [
+        { word: 'apple', definition: 'n. 苹果' },
+        { word: 'banana', definition: 'n. 香蕉' },
+        { word: 'orange', definition: 'n. 橘子' },
+        { word: 'grape', definition: 'n. 葡萄' },
+        { word: 'watermelon', definition: 'n. 西瓜' }
+        ];
+
+        // 当前显示的单词索引
+        var currentWordIndex = 0;
+
+        // 显示下一个单词和定义
+        function showNext() {
+            currentWordIndex++;
+            if (currentWordIndex >= words.length) {
+                currentWordIndex = 0;
+            }
+            $('.container h1').textContent = words[currentWordIndex].unit;
+            $('.word').textContent = syllables(words[currentWordIndex].word);
+            $('.definition').textContent = words[currentWordIndex].definition;
+        }
+
+        // document.addEventListener('DOMContentLoaded', function() {
+        // });
+        fetch('danci.json')
+            .then(response => response.json())
+            .then(data => {
+                words = data.data;
+            });
+
+        function syllables(word){
+            var letters=word;
+            var syllablesArray=[];
+            while(letters.length>0){
+                // var lastSyllable=letters.match(/(^y|y(?=[aeiou])|bh|ch|gh|sc|wr|ng$|[^aeiouy])?([aeiou]*y?)?([^aeiouy]*)?$/i);
+                var lastSyllable=letters.match(/(^y|y(?=[aeiou])|bh|dg|ch|fl|fr|gh|kn|ph|sh|sc|st|th|tr|wr|ng$|[^aeiouy])?([aeiou]*y?)?([^aeiouy]*)?$/i);
+                if(lastSyllable){
+                    var currentSyllable=lastSyllable[0];
+                    syllablesArray.push(currentSyllable);
+                    var syllableLength=currentSyllable.length;
+                    lettersCount=letters.length;
+                    letters=letters.substr(0,lettersCount-syllableLength);
+                    console.log(letters);
+                }
+            }
+            if(syllablesArray){
+                return syllablesArray.reverse().join("·");
+            }else{
+                return "";
+            }
+        }
+    </script>
+  </body>
+</html>
