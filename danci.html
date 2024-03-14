@@ -46,19 +46,60 @@
       .button:hover {
         background-color: #555;
       }
+      .pronounce {
+        display: inline-block;
+        font-size: 0;
+        height: 22px;
+        letter-spacing: 0;
+        vertical-align: middle;
+        width: 22px;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <h1>剑桥 Join in</h1>
-      <div class="word">apple</div>
+      <div class="word">apple<img class="pronounce" src="https://shared.ydstatic.com/market/souti/web_dict/online/2.9.1/dist/client/img/ic_result_voice_00.1048cc2.png" alt="voice"></div>
       <div class="definition">n. 苹果</div>
       <button class="button" onclick="showPrev()">上一个</button>
       <button class="button" onclick="showNext()">下一个</button>
     </div>
+    <audio id="audio" src="http://dict.youdao.com/speech?audio=hello"></audio>
     <script>
         var $ = document.querySelector.bind(document);
         // function memorize(words){}
+        function pronounce() {
+          var word=document.getElementsByClassName('word');
+          var audio=document.getElementById("audio");
+          var url=audio.src;//找到有道在线发音的api地址
+
+          //遍历节点，绑定事件
+          //目的是给网页中的p标签绑定点击事件
+          for(var index in word){
+            word[index].onclick=function(){
+              // console.log(index);
+              // console.log(this);
+              var textContent=this.textContent;//获取p标签的文本内容，即英文单词
+              var newurl=url.replace("hello",textContent);//替换有道在线语音中的英文单词
+              audio.src=newurl;
+              audio.play();
+            }
+          }
+          //遍历节点，绑定事件
+          //给网页中的img标签绑定点击事件
+          var pronounce=document.getElementsByClassName("pronounce");
+          for(var index in pronounce){
+            pronounce[index].onclick=function(){
+              console.log(this.previousSibling);//通过previousSibling获取p标签对象，因为p标签内才有英文单词
+              var textContent=this.previousSibling.textContent;
+              var newurl=url.replace("hello",textContent);
+              audio.src=newurl;
+              audio.play();
+            }
+          }
+        }
+        pronounce();
+
         // 单词和定义列表
         var words = [
         { word: 'apple', definition: 'n. 苹果' },
@@ -74,11 +115,12 @@
         // 显示上一个单词和定义
         function showPrev() {
             currentWordIndex--;
-            if (currentWordIndex < 0) {
+            if (currentWordIndex <= 0) {
                 currentWordIndex = words.length;
             }
             $('.container h1').textContent = words[currentWordIndex].unit;
-            $('.word').textContent = syllables(words[currentWordIndex].word);
+            // $('.word').textContent = syllables(words[currentWordIndex].word);
+            $('.word').innerHTML = $('.word').innerHTML.replace($('.word').textContent,syllables(words[currentWordIndex].word));
             $('.definition').textContent = words[currentWordIndex].definition;
         }
         // 显示下一个单词和定义
@@ -88,7 +130,8 @@
                 currentWordIndex = 0;
             }
             $('.container h1').textContent = words[currentWordIndex].unit;
-            $('.word').textContent = syllables(words[currentWordIndex].word);
+            // $('.word').textContent = syllables(words[currentWordIndex].word);
+            $('.word').innerHTML = $('.word').innerHTML.replace($('.word').textContent,syllables(words[currentWordIndex].word));
             $('.definition').textContent = words[currentWordIndex].definition;
         }
 
