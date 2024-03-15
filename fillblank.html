@@ -126,7 +126,7 @@
 
         // 显示上一个单词和定义
         function showPrev() {
-            $('.result').textContent = '';
+            //$('.result').textContent = '';
             word = wordarray[random(0, words.length)];
             correctAnswer = wordFillBlank(word);
             currentWordIndex = words.filter(x=>x.word==word)[0].index;
@@ -138,7 +138,7 @@
         }
         // 显示下一个单词和定义
         function showNext() {
-            $('.result').textContent = '';
+            //$('.result').textContent = '';
             word = wordarray[random(0, words.length)];
             correctAnswer = wordFillBlank(word);
             currentWordIndex = words.filter(x=>x.word==word)[0].index;
