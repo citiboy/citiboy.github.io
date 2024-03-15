@@ -116,7 +116,7 @@
 
       // 正确答案
       var correctAnswer = wordFillBlank($('.word').textContent);
-      fetch('http://ice42.3vhost.work/url.asp?url=https://citiboy.github.io/danci.json')
+      fetch('danci.json')
             .then(response => response.json())
             .then(data => {
                 words = data.data;
