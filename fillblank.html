@@ -62,12 +62,6 @@
       .button:hover {
         background-color: #555;
       }
-      .result {
-        font-size: 24px;
-        color: red;
-        text-align: center;
-        margin-bottom: 40px;
-      }
     </style>
   </head>
   <body>
@@ -75,7 +69,6 @@
       <h1>填写出正确的字母。</h1>
       <div class="word">apple<img class="pronounce" src="https://shared.ydstatic.com/market/souti/web_dict/online/2.9.1/dist/client/img/ic_result_voice_00.1048cc2.png" alt="voice"></div>
       <div class="definition">n. 苹果</div>
-      <div class="result"></div>
       <button class="button" onclick="checkAnswer()">提交</button>
       <!-- <button class="button" onclick="showPrev()">上一个</button> -->
       <button class="button" onclick="showNext()">下一个</button>
@@ -108,9 +101,9 @@
           playerAnswer += inputLetters[i].value;
         }
         if (playerAnswer === correctAnswer) {
-          $('.result').textContent = ('答对了！');
+          $('.definition').innerHTML = ('<green>答对了！</green>');
         } else {
-          $('.result').textContent = ('答错了，请再试一次。');
+          $('.definition').innerHTML = ('<red>答错了，请再试一次。</red>');
         }
       }
 
