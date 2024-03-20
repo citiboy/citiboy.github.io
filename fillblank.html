@@ -90,7 +90,7 @@
         const index = random(0, word.length-1);
         const answer = word[index];
         // 获取用户输入并检查答案
-        $('.word').innerHTML = word.replace(answer,'<input type="text" class="letter" maxlength="1" autofocus>');
+        $('.word').innerHTML = word.replace(answer,'<input type="text" class="letter" maxlength="1" autofocus>')+'<img class="pronounce" src="https://shared.ydstatic.com/market/souti/web_dict/online/2.9.1/dist/client/img/ic_result_voice_00.1048cc2.png" alt="voice">';
         // console.log(index, answer, word.replace(answer,'<input type="text" class="letter" maxlength="1" autofocus>'), $('.word').innerHTML);
         return answer;
       }
