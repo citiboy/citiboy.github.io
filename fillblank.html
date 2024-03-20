@@ -116,10 +116,11 @@
                 words = data.data;
                 //words = Object.values(data.word);
                 // console.log(words);
-                wordarray = words.map(x => x.word);
-                word = wordarray[random(0, words.length-1)];
+                choose = random(0, words.length-1);
+                word = words[choose].word;
+                definition = words[choose].definition;
                 correctAnswer = wordFillBlank(word);
-                $('.definition').textContent = words[words.filter(x=>x.word==word)[0].index].definition;
+                $('.definition').textContent = definition;
             });
 
         // 当前显示的单词索引
