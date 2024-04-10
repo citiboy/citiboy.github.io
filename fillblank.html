@@ -63,14 +63,6 @@
       .button:hover {
         background-color: #555;
       }
-      .pronounce {
-        display: inline-block;
-        font-size: 0;
-        height: 22px;
-        letter-spacing: 0;
-        vertical-align: middle;
-        width: 22px;
-      }
     </style>
   </head>
   <body>
@@ -98,7 +90,7 @@
         const index = random(0, word.length-1);
         const answer = word[index];
         // 获取用户输入并检查答案
-        $('.word').innerHTML = word.replace(answer,'<input type="text" class="letter" maxlength="1" autofocus>')+'<img class="pronounce" src="https://shared.ydstatic.com/market/souti/web_dict/online/2.9.1/dist/client/img/ic_result_voice_00.1048cc2.png" alt="voice">';
+        $('.word').innerHTML = syllables(word).replace(answer,'<input type="text" class="letter" maxlength="1" autofocus>');
         // console.log(index, answer, word.replace(answer,'<input type="text" class="letter" maxlength="1" autofocus>'), $('.word').innerHTML);
         return answer;
       }
@@ -124,11 +116,9 @@
                 words = data.data;
                 //words = Object.values(data.word);
                 // console.log(words);
-                choose = random(0, words.length-1);
-                word = words[choose].word;
-                definition = words[choose].definition;
-                correctAnswer = wordFillBlank(word);
-                $('.definition').textContent = definition;
+                choice = words[random(0, words.length-1)];
+                correctAnswer = wordFillBlank(choice.word);
+                $('.definition').textContent = choice.definition;
             });
 
         // 当前显示的单词索引
@@ -137,26 +127,26 @@
         // 显示上一个单词和定义
         function showPrev() {
             //$('.result').textContent = '';
-            word = wordarray[random(0, words.length-1)];
-            correctAnswer = wordFillBlank(word);
-            currentWordIndex = words.filter(x=>x.word==word)[0].index;
+            choice = words[random(0, words.length-1)];
+            correctAnswer = wordFillBlank(choice.word);
+            currentWordIndex = choice.index;
             // console.log(words.filter(x=>x.word==word));
-            $('.container h1').textContent = words[currentWordIndex].unit;
-            // $('.word').textContent = syllables(words[currentWordIndex].word);
-            // $('.word').innerHTML = $('.word').innerHTML.replace($('.word').textContent,syllables(words[currentWordIndex].word));
-            $('.definition').textContent = words[currentWordIndex].definition;
+            $('.container h1').textContent = choice.unit;
+            // $('.word').textContent = syllables(choice.word);
+            // $('.word').innerHTML = $('.word').innerHTML.replace($('.word').textContent,syllables(choice.word));
+            $('.definition').textContent = choice.definition;
         }
         // 显示下一个单词和定义
         function showNext() {
             //$('.result').textContent = '';
-            word = wordarray[random(0, words.length-1)];
-            correctAnswer = wordFillBlank(word);
-            currentWordIndex = words.filter(x=>x.word==word)[0].index;
+            choice = words[random(0, words.length-1)];
+            correctAnswer = wordFillBlank(choice.word);
+            currentWordIndex = choice.index;
             // console.log(words.filter(x=>x.word==word));
-            $('.container h1').textContent = words[currentWordIndex].unit;
-            // $('.word').textContent = syllables(words[currentWordIndex].word);
-            // $('.word').innerHTML = $('.word').innerHTML.replace($('.word').textContent,syllables(words[currentWordIndex].word));
-            $('.definition').textContent = words[currentWordIndex].definition;
+            $('.container h1').textContent = choice.unit;
+            // $('.word').textContent = syllables(choice.word);
+            // $('.word').innerHTML = $('.word').innerHTML.replace($('.word').textContent,syllables(choice.word));
+            $('.definition').textContent = choice.definition;
         }
 
         function syllables(word){
@@ -169,7 +159,7 @@
                     var currentSyllable=lastSyllable[0];
                     syllablesArray.push(currentSyllable);
                     var syllableLength=currentSyllable.length;
-                    lettersCount=letters.length;
+                    var lettersCount=letters.length;
                     letters=letters.substr(0,lettersCount-syllableLength);
                     console.log(letters);
                 }
